@@ -1,0 +1,44 @@
+{
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Complete project proposal",
+        "description": "Write and submit the project proposal by the end of the week.",
+        "completed": true,
+        "dueDate": "2023-12-15",
+        "priority": "high"
+      },
+      {
+        "id": 2,
+        "title": "Buy groceries",
+        "description": "Pick up the groceries for the week, including milk, eggs, and vegetables.",
+        "completed": false,
+        "dueDate": "2023-12-10",
+        "priority": "medium"
+      },
+      {
+        "id": 3,
+        "title": "Call John",
+        "description": "Call John to discuss the upcoming meeting agenda.",
+        "completed": true,
+        "dueDate": "2023-12-18",
+        "priority": "low"
+      },
+      {
+        "id": 4,
+        "title": "Prepare presentation",
+        "description": "Create a presentation for the team meeting next week.",
+        "completed": false,
+        "dueDate": "2023-12-20",
+        "priority": "medium"
+      },
+      {
+        "id": 5,
+        "title": "Read book",
+        "description": "Start reading the new novel you bought last month.",
+        "completed": true,
+        "dueDate": "2023-12-25",
+        "priority": "low"
+      }
+    ]
+  }
