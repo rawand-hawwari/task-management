@@ -18,7 +18,8 @@ const AddTask = ({ children, onClose }) => {
       description,
       dueDate,
       priority,
-      completed: false,
+      status: false,
+      is_deleted: false, 
     };
 
     try {

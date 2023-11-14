@@ -20,7 +20,6 @@ const UpateTask = () => {
       description,
       dueDate,
       priority,
-      completed: false,
     };
     try {
       const response = await dispatch(updateTask({task: newTask, id: id}));

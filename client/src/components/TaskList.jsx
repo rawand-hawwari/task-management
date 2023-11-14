@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchTasks, deleteTask, updateTask } from "../redux/TaskSlice";
+import { fetchTasks, deleteTask, updateTask, updateState } from "../redux/TaskSlice";
 import { Link, useNavigate } from "react-router-dom";
 // import { fetchFilteredTasks } from "../redux/TaskSlice";
 
@@ -26,23 +26,13 @@ const [filteredTasks, setFilteredTasks] = useState([]);
   const handleClearSearch = () => {
     setSearchQuery("");
     setFilteredTasks([]);
-    // dispatch(fetchFilteredTasks("")); // Fetch all tasks again to reset the filtered tasks
   };
   const handleDelete = (taskId) => {
     dispatch(deleteTask(taskId));
     dispatch(fetchTasks());
   };
-  const handleState = (taskId) => {
-    const updatedTask = tasks.find((task) => task.id === taskId);
-
-  if (updatedTask) {
-    const updatedTaskCopy = {
-      ...updatedTask,
-      completed: !updatedTask.completed,
-    };
-
-    dispatch(updateTask({ task: updatedTaskCopy, id: taskId }));
-  }
+  const handleState = (taskId, status) => {
+    dispatch(updateState({taskId: taskId, status: status}));
   dispatch(fetchTasks());
   };
 
@@ -67,7 +57,7 @@ const [filteredTasks, setFilteredTasks] = useState([]);
           {filteredTasks.length===0
             ? tasks.map((task) => (
                 <div
-                  key={task.id}
+                  key={task._id}
                   className="card bg-slate-400 w-64 mx-4 my-3 p-7 h-72 rounded-lg"
                 >
                   <div className="card-body text-start flex flex-col justify-between h-full">
@@ -82,13 +72,13 @@ const [filteredTasks, setFilteredTasks] = useState([]);
                         className={`px-3 py-2 rounded-full ${
                           task.status ? "bg-green-300" : "bg-red-300"
                         }`}
-                        onClick={() => handleState(task.id)}
+                        onClick={() => handleState(task._id, task.status)}
                       >
-                        {task.completed ? "Completed" : "Pending"}
+                        {task.status ? "Completed" : "Pending"}
                       </button>
                       <button
                         className="px-3 py-2 border rounded-xl"
-                        onClick={() => handleUpdate(task.id)}
+                        onClick={() => handleUpdate(task._id)}
                       >
                         <svg
                           class="w-4 h-4"
@@ -110,7 +100,7 @@ const [filteredTasks, setFilteredTasks] = useState([]);
                       </button>
                       <button
                         className="px-3 py-2 border rounded-xl"
-                        onClick={() => handleDelete(task.id)}
+                        onClick={() => handleDelete(task._id)}
                       >
                         <svg
                           class="w-4 h-4"
