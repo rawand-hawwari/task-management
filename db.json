@@ -12,7 +12,7 @@
       "id": 2,
       "title": "Buy groceries",
       "description": "Pick up the groceries for the week, including milk, eggs, and vegetables.",
-      "completed": false,
+      "completed": true,
       "dueDate": "2023-12-10",
       "priority": "medium"
     },

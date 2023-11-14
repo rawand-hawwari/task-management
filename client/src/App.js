@@ -7,6 +7,8 @@ import AddTask from './components/AddTask';
 import UpateTask from './components/UpateTask';
 import PendingTasks from './components/PendingTasks';
 import CompletedTasks from './components/CompletedTasks';
+import Login from './components/Login';
+import Signup from './components/Signup';
 
 
 function App() {
@@ -23,6 +25,8 @@ function App() {
             <Route path='/updateTask/:id' element={<UpateTask />} />
             <Route path='/completed' element={<CompletedTasks />} />
             <Route path='/pending' element={<PendingTasks />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/signup' element={<Signup />} />
           </Routes>
         </div>
       </Router>

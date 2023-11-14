@@ -22,9 +22,6 @@ const UpateTask = () => {
       priority,
       completed: false,
     };
-
-    console.log(newTask);
-    console.log(id);
     try {
       const response = await dispatch(updateTask({task: newTask, id: id}));
       setTitle('');

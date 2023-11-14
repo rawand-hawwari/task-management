@@ -2,8 +2,8 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async () => {
-  const response = await axios.get('http://localhost:3004/tasks');
-//   const response = await axios.get('http://localhost:5000/getAllTasks');
+//   const response = await axios.get('http://localhost:3004/tasks');
+  const response = await axios.get('http://localhost:5000/getAllTask');
   return response.data;
 });
 
@@ -19,10 +19,34 @@ export const updateTask = createAsyncThunk('tasks/updateTask', async ({ task, id
   return response.data;
 });
 
-export const updateState = createAsyncThunk('tasks/updateState', async (taskId) => {
-    const response = await axios.put(`http://localhost:3004/tasks/${taskId}`);
-  //   const response = await axios.put(`http://localhost:5000/updateStatus/${task.id}`, task);
-    return response.data;
+// export const updateState = createAsyncThunk('tasks/updateState', async (taskId) => {
+//     const response = await axios.put(`http://localhost:3004/tasks/${taskId}`);
+//   //   const response = await axios.put(`http://localhost:5000/updateStatus/${task.id}`, task);
+//     return response.data;
+//   });
+export const updateState = createAsyncThunk('tasks/updateState', async (taskId, { getState }) => {
+    const state = getState();
+    const updatedTasks = state.tasks.map((task) => {
+      if (task.id === taskId) {
+        // Toggle the 'completed' field
+        return {
+          ...task,
+          completed: !task.completed,
+        };
+      }
+      return task;
+    });
+  
+    // Send a PUT request to update the JSON server with the updated tasks
+    const response = await axios.put(`http://localhost:3004/tasks/${taskId}`, {
+      completed: !state.tasks.find((task) => task.id === taskId).completed,
+    });
+  
+    if (response.status === 200) {
+      return updatedTasks;
+    } else {
+      throw new Error('Update failed');
+    }
   });
 
 export const deleteTask = createAsyncThunk('tasks/deleteTask', async (taskId) => {
@@ -44,21 +68,6 @@ export const fetchCompletedTasks = createAsyncThunk('tasks/fetchCompletedTasks',
     const pendingTasks = tasks.filter((task) => task.completed === false);
     return pendingTasks;
   });
-
-  export const fetchFilteredTasks = createAsyncThunk(
-    'tasks/fetchFilteredTasks',
-    async (searchQuery, { getState }) => {
-      const tasks = getState().tasks.tasks; // Get all tasks from the store
-  
-      // Filter tasks based on the searchQuery
-      const filteredTasks = tasks.filter((task) => {
-        // Customize the filtering logic based on your requirements.
-        return task.title.toLowerCase().includes(searchQuery.toLowerCase());
-      });
-  
-      return filteredTasks;
-    }
-  );
 
 const tasksSlice = createSlice({
   name: 'tasks',

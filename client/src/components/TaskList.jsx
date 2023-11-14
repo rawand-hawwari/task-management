@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTasks, deleteTask, updateTask } from "../redux/TaskSlice";
 import { Link, useNavigate } from "react-router-dom";
-import { fetchFilteredTasks } from "../redux/TaskSlice";
+// import { fetchFilteredTasks } from "../redux/TaskSlice";
 
 const TaskList = () => {
   const dispatch = useDispatch();
   const tasks = useSelector((state) => state.tasks.tasks);
-  const filteredTasks = useSelector((state) => state.tasks.filteredTasks);
+//   const filteredTasks = useSelector((state) => state.tasks.filteredTasks);
+const [filteredTasks, setFilteredTasks] = useState([]);
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -15,20 +16,34 @@ const TaskList = () => {
     dispatch(fetchTasks());
   }, [dispatch]);
 
-  const handleSearch = (searchQuery) => {
-    dispatch(fetchFilteredTasks(searchQuery));
+  const handleSearch = () => {
+    // dispatch(fetchFilteredTasks({task: tasks, searchQuery: searchQuery}));
+    setFilteredTasks(tasks.filter((task) => {
+        return task.title.toLowerCase().includes(searchQuery.toLowerCase());
+      }))
   };
 
   const handleClearSearch = () => {
     setSearchQuery("");
-    dispatch(fetchTasks()); // Fetch all tasks again to reset the filtered tasks
+    setFilteredTasks([]);
+    // dispatch(fetchFilteredTasks("")); // Fetch all tasks again to reset the filtered tasks
   };
   const handleDelete = (taskId) => {
     dispatch(deleteTask(taskId));
     dispatch(fetchTasks());
   };
   const handleState = (taskId) => {
-    dispatch(updateTask(taskId));
+    const updatedTask = tasks.find((task) => task.id === taskId);
+
+  if (updatedTask) {
+    const updatedTaskCopy = {
+      ...updatedTask,
+      completed: !updatedTask.completed,
+    };
+
+    dispatch(updateTask({ task: updatedTaskCopy, id: taskId }));
+  }
+  dispatch(fetchTasks());
   };
 
   const handleUpdate = (taskId) => {
@@ -43,12 +58,13 @@ const TaskList = () => {
         placeholder="Search tasks"
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
+        className="px-3 py-2 border rounded-lg mx-3 my-4"
       />
-      <button onClick={handleSearch(searchQuery)}>Search</button>
-      <button onClick={handleClearSearch}>Clear Search</button>
+      <button className="mx-3 px-3 py-2 rounded-lg bg-slate-400 my-4" onClick={handleSearch}>Search</button>
+      <button className="mx-3 px-3 py-2 rounded-lg bg-slate-200 my-4" onClick={handleClearSearch}>Clear Search</button>
       <div className="flex flex-col justify-center items-center">
         <div className="flex justify-start w-auto items-center gap-3 mx-20 flex-wrap sm:pl-64">
-          {searchQuery===""
+          {filteredTasks.length===0
             ? tasks.map((task) => (
                 <div
                   key={task.id}
@@ -64,7 +80,7 @@ const TaskList = () => {
                     <div className="flex gap-4">
                       <button
                         className={`px-3 py-2 rounded-full ${
-                          task.completed ? "bg-green-300" : "bg-red-300"
+                          task.status ? "bg-green-300" : "bg-red-300"
                         }`}
                         onClick={() => handleState(task.id)}
                       >
