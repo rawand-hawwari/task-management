@@ -20,11 +20,11 @@ const CompletedTasks = () => {
 
   const handleDelete = (taskId) => {
     dispatch(deleteTask(taskId));
-    dispatch(fetchTasks());
+    dispatch(fetchCompletedTasks());
   };
   const handleState = (taskId, status) => {
     dispatch(updateState({taskId: taskId, status: status}));
-  dispatch(fetchTasks());
+  dispatch(fetchCompletedTasks());
   };
 
   const handleUpdate = (taskId) => {
@@ -36,7 +36,7 @@ const CompletedTasks = () => {
       <div className="flex justify-start w-auto items-center gap-3 mx-20 flex-wrap sm:pl-64">
         {tasks.map((task) => (
           <div
-            key={task.id}
+            key={task._id}
             className="card bg-slate-400 w-64 mx-4 my-3 p-7 h-72 rounded-lg"
           >
             <div className="card-body text-start flex flex-col justify-between h-full">

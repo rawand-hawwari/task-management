@@ -2,30 +2,30 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async () => {
-//   const response = await axios.get('http://localhost:3004/tasks');
   const response = await axios.get('http://localhost:5000/getAllTask');
   return response.data;
 });
 
+export const fetchTask = createAsyncThunk('tasks/fetchTask', async (id) => {
+      const response = await axios.get(`http://localhost:5000/getTaskById/${id}`);
+      return response.data;
+    });
+
 export const addTask = createAsyncThunk('tasks/addTask', async (task) => {
-//   const response = await axios.post('http://localhost:3004/tasks', task);
   const response = await axios.post('http://localhost:5000/addTask', task);
   return response.data;
 });
 
 export const updateTask = createAsyncThunk('tasks/updateTask', async ({ task, id }, { dispatch, getState }) => {
-//   const response = await axios.put(`http://localhost:3004/tasks/${id}`, task);
   const response = await axios.put(`http://localhost:5000/updateTasks/${id}`, task);
   return response.data;
 });
 
 export const updateState = createAsyncThunk('tasks/updateState', async ({ taskId, status }, { dispatch, getState }) => {
-    // const response = await axios.put(`http://localhost:3004/tasks/${taskId}`);
     const response = await axios.put(`http://localhost:5000/updateStatus/${taskId}/${!status}`);
     return response.data;
   });
 export const deleteTask = createAsyncThunk('tasks/deleteTask', async (taskId) => {
-//   await axios.delete(`http://localhost:3004/tasks/${taskId}`);
   await axios.put(`http://localhost:5000/removeTask/${taskId}`);
   return taskId;
 });

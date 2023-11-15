@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { updateTask } from '../redux/TaskSlice';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateTask, fetchTask } from '../redux/TaskSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 
@@ -12,6 +12,10 @@ const UpateTask = () => {
   const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState('');
   const [priority, setPriority] = useState('low');
+//   const [task, setTask] = useState([]);
+  useEffect(() => {
+    dispatch(fetchTask(id));
+  }, [dispatch]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
